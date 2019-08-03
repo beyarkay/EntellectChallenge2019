@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,8 +108,6 @@ public class Main {
 		writeOutput("output/output.txt", null);
 	}
 	
-	
-	
 	public static void readInput(String fileName) throws IOException {
 		
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
@@ -182,9 +181,45 @@ public class Main {
 
 		System.out.println("failure");
 		System.exit(-1);
-		return -1;}
+		return -1;
+	}
 
-    public static void writeOutput(String fileName, char[][] worms) throws IOException {
+	static int WTToChar(int i) {
+		switch (i) {
+			case WT_B:
+				return 'B';
+			case WT_M:
+				return 'M';
+			case WT_S:
+				return 'S';
+			case WT_X:
+				return 'X';
+			default:
+				System.out.println("failure");
+				System.exit(-1);
+				return -1;
+		}
+	}
+
+	static int TTToChar(int i) {
+		switch (i) {
+			case TT_D:
+				return 'D';
+			case TT_R:
+				return 'R';
+			case TT_P:
+				return 'P';
+			case TT_A:
+				return 'A';
+			default:
+				System.out.println("failure");
+				System.exit(-1);
+				return -1;
+		}
+	}
+
+
+	public static void writeOutput(String fileName, char[][] worms) throws IOException {
 
 
 		worms = new char[][]{{'B', 'D', 'D', 'F', 'D', 'D', 'F'},
@@ -217,27 +252,43 @@ public class Main {
 		}
 
 		int[][] worms = new int[totalWorkers][N_SHIFTS + 1];
-
-
-//		for (int i = 0; i < workerCounts.length; i++) {
-//			for (int j = 1; j < workerCounts[i]; j++) {
-//				worms[i][0] = SP
-//
-//			}
-//		}
-
-
+		for (int i = 0; i < worms.length; i++) {
+			Arrays.fill(worms[i], -1);
+		}
 
 		for (int i = 0; i < workerCounts.length; i++) {
-			for (int specialityIndex = 0; specialityIndex < tasks.length; specialityIndex++) {
-				for (int shiftIndex = 0; shiftIndex < tasks[specialityIndex].length; shiftIndex++) {
+			// The first character of each line is just the Worker type, so add it in
+			// 'i' is the int constant for that Worker Type ()
+			for (int j = 0; j < workerCounts[i]; j++) {
+				worms[i + j][0] = i;
+			}
+		}
 
 
-					break;
+		for (int worm_i = 0; worm_i < worms.length; worm_i++) {
+			// Check if the worm can do a task of it's speciality
+			for (int shift = 0; shift < N_SHIFTS; shift++) {
+				int worm_type = worms[worm_i][0];
+				if (tasks[worm_type][shift] > 0) {
+					worms[worm_i][shift] = worm_type;
+
 				}
 			}
+			// Now check again to allocate all the remaining worms
+			for (int shift = 0; shift < N_SHIFTS; shift++) {
+				int worm_type = worms[worm_i][0];
 
+				for (int work_type = 0; work_type < 4; work_type++) {
+					// If a worm hasn't been allocated && there is a task for it to do
+					if (worms[worm_i][shift] != -1 && tasks[work_type][shift] > 0) {
+						worms[worm_i][shift] = work_type;
+						break;
+
+					}
+				}
+			}
 		}
+//		writeOutput();
 	}
 
 
