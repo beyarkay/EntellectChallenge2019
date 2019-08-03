@@ -57,11 +57,13 @@ public class Main {
 	static final int WT_S = 2; //Space plumber
 	static final int WT_X = 3; //Xenobiologist
 
-	//Specialities
+	//Task Types
 	static final int TT_D = 0; //Dome repair
 	static final int TT_R = 1; //Rover repair
 	static final int TT_P = 2; //Plumbing
 	static final int TT_A = 3; //Alien classification
+	static final int TT_F = -1; // Free
+	private static boolean DEBUG = true;
 
 	//Input
 	static int[] workerCounts = new int[4]; //Count for number of each type of worker
@@ -81,7 +83,7 @@ public class Main {
 	static ArrayList<Job> jobsList = new ArrayList<>();
 
 	private static void runScheduler() {
-		while(doTasksRemain()){
+		while (doTasksRemain()) {
 			//1 find optimal workers
 //			while(remainingTasks[0] != 0 && workersB)
 //			{
@@ -98,16 +100,29 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 
-//		readInput(args[0]);
-		readInput("input/map_5.input");
+		String[] inFiles = new String[]{
+				"input/map_1.input",
+				"input/map_2.input",
+				"input/map_3.input",
+				"input/map_4.input",
+				"input/map_5.input"
+		};
+		String[] outFiles = new String[]{
+				"output/map_1.txt",
+				"output/map_2.txt",
+				"output/map_3.txt",
+				"output/map_4.txt",
+				"output/map_5.txt"
+		};
+		DEBUG = false;
+		for (int i = 0; i < inFiles.length; i++) {
+			readInput(inFiles[i]);
+			System.out.println("Done Reading file " + inFiles[i]);
+			mvp(outFiles[i]);
+			System.out.println("Done MVPing file " + inFiles[i] + "\n");
 
-		runScheduler();
-		System.out.println("Done Reading");
 
-		mvp();
-
-
-//		writeOutput("output/output.txt", null);
+		}
 	}
 
 	public static void readInput(String fileName) throws IOException {
@@ -179,6 +194,8 @@ public class Main {
 				return TT_P;
 			case 'A':
 				return TT_A;
+			case 'F':
+				return TT_F;
 		}
 
 		System.out.println("failure");
@@ -196,11 +213,11 @@ public class Main {
 				return 'S';
 			case WT_X:
 				return 'X';
-			default:
-				System.out.println("failure");
-				System.exit(-1);
-				return '!';
 		}
+
+		System.out.println("failureWT : " + i);
+		System.exit(-1);
+		return '!';
 	}
 
 	static char TTToChar(int i) {
@@ -213,21 +230,22 @@ public class Main {
 				return 'P';
 			case TT_A:
 				return 'A';
-			default:
-				System.out.println("failure");
-				System.exit(-1);
-				return '!';
+			case TT_F:
+				return 'F';
 		}
+		System.out.println("failure TT: " + i);
+		System.exit(-1);
+		return '!';
 	}
 
 
 	public static void writeOutput(String fileName, char[][] worms) throws IOException {
 
 
-		worms = new char[][]{{'B', 'D', 'D', 'F', 'D', 'D', 'F'},
-				{'B', 'D', 'F', 'F', 'D', 'F', 'F'},
-				{'M', 'R', 'F', 'F', 'R', 'R', 'F'},
-				{'M', 'R', 'F', 'F', 'R', 'R', 'F'}};
+//		worms = new char[][]{{'B', 'D', 'D', 'F', 'D', 'D', 'F'},
+//				{'B', 'D', 'F', 'F', 'D', 'F', 'F'},
+//				{'M', 'R', 'F', 'F', 'R', 'R', 'F'},
+//				{'M', 'R', 'F', 'F', 'R', 'R', 'F'}};
 
 		StringBuilder outputString = new StringBuilder("");
 
@@ -247,7 +265,7 @@ public class Main {
 	/*
 	Boyd Minimum Viable Product
 	 */
-	public static void mvp() throws IOException {
+	public static void mvp(String outputFile) throws IOException {
 		int totalWorkers = 0;
 		for (int workerCount : workerCounts) {
 			totalWorkers += workerCount;
@@ -257,17 +275,22 @@ public class Main {
 		for (int i = 0; i < worms.length; i++) {
 			Arrays.fill(worms[i], -1);
 		}
+		int count = 0;
 		for (int i = 0; i < workerCounts.length; i++) {
 			// The first character of each line is just the Worker type, so add it in
 			// 'i' is the int constant for that Worker Type ()
 			for (int j = 0; j < workerCounts[i]; j++) {
-				worms[i * workerCounts[i] + j][0] = i;
+				worms[count][0] = i;
+				count++;
 			}
 		}
 
 
 		for (int worm_i = 0; worm_i < worms.length; worm_i++) {
-			// Check if the worm can do a task of it's speciality
+
+			if (DEBUG) {
+				System.out.println(String.format("Wormid %d / %d", worm_i, worms.length));
+			}// Check if the worm can do a task of it's speciality
 			for (int shift = 0; shift < N_SHIFTS; shift++) {
 				int worm_type = worms[worm_i][0];
 				if (tasks[worm_type][shift] > 0) {
@@ -298,7 +321,7 @@ public class Main {
 				wormsToWrite[i][j] = TTToChar(worms[i][j]);
 			}
 		}
-		writeOutput("output/output.txt", wormsToWrite);
+		writeOutput(outputFile, wormsToWrite);
 	}
 
 
