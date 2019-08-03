@@ -113,7 +113,7 @@ public class Main {
 		for (int i = 0; i < inFiles.length; i++) {
 			readInput(inFiles[i]);
 			System.out.println("Done Reading file " + inFiles[i]);
-			mvp(outFiles[i]);
+			holiday_everyday(outFiles[i]);
 			System.out.println("Done MVPing file " + inFiles[i] + "\n");
 //			if (DEBUG) {
 //				break;
@@ -258,6 +258,7 @@ public class Main {
 
 		PrintWriter pw = new PrintWriter(new FileWriter(fileName));
 
+		System.out.println("Worms: " + wormsToWrite.length);
 		for (int wormIndex = 0; wormIndex < wormsToWrite.length; wormIndex++) {
 			outputString = new StringBuilder();
 			for (int shiftIndex = 0; shiftIndex < wormsToWrite[wormIndex].length; shiftIndex++) {
@@ -295,49 +296,91 @@ public class Main {
 //		}
 
 		for (int worm_i = 0; worm_i < workers.size(); worm_i++) {
-
-			if (DEBUG) {
+			if (DEBUG && worm_i % 500 == 0) {
 				System.out.println(String.format("Wormid %d / %d", worm_i, workers.size()));
-			}// Check if the worm can do a task of it's speciality
+			}
+
+			// Check if the worm can do a task of it's speciality
 			for (int shift = 0; shift < N_SHIFTS; shift++) {
 				int worm_type = workers.get(worm_i).speciality.ordinal();
 
-				//TODO: Get rid of tasks
-//				System.out.print(N_SHIFTS);
-//				System.out.print(" - ");
-//				System.out.println(workers.get(worm_i).previousTasks.length);
-//				System.out.println();
-				if (tasks[worm_type][shift] > 0) {
+				if (tasks[worm_type][shift] > 0 && workers.get(worm_i).previousTasks[shift] == TT_F) {
 					workers.get(worm_i).previousTasks[shift] = worm_type;
-//					workers[worm_i][shift] = worm_type;
+					tasks[worm_type][shift] -= 1;
 				}
 			}
+
 			// Now check again to allocate all the remaining workers
 			for (int shift = 0; shift < N_SHIFTS; shift++) {
-				int worm_type = workers.get(worm_i).speciality.ordinal();
 
 				for (int work_type = 0; work_type < 4; work_type++) {
 					// If a worm hasn't been allocated && there is a task for it to do
-					if (workers.get(worm_i).previousTasks[shift] != -1 && tasks[work_type][shift] > 0) {
+					if (workers.get(worm_i).previousTasks[shift] == TT_F &&
+							tasks[work_type][shift] > 0 &&
+							shift + 1 < N_SHIFTS) {
 						workers.get(worm_i).previousTasks[shift] = work_type;
+						tasks[work_type][shift] -= 1;
 						break;
 					}
-
 				}
 			}
 		}
 
-//		char[][] wormsToWrite = new char[totalWorkers][N_SHIFTS + 1];
-//
-//		for (int i = 0; i < workers.size(); i++) {
-//			wormsToWrite[i][0] = WTToChar(workers.get(i).speciality.ordinal());
-//
-//			for (int j = 0; j < workers.get(i).previousTasks.length; j++) {
-//				wormsToWrite[i][j + 1] = TTToChar(workers.get(i).previousTasks[j]);
-//			}
-//		}
+		writeOutput(outputFile, workers);
+	}
+
+	public static void holiday_everyday(String outputFile) throws IOException {
+
+		for (int worm_i = 0; worm_i < workers.size(); worm_i++) {
+
+			if (DEBUG && worm_i % 500 == 0) {
+				System.out.println(String.format("Wormid %d / %d", worm_i, workers.size()));
+			}// Check if the worm can do a task of it's speciality
+
+			for (int shift = 0; shift < N_SHIFTS; shift++) {
+				int worm_type = workers.get(worm_i).speciality.ordinal();
+
+				// Only make them work every 12 shifts (every 4 days) or if they're too motivated
+				if (workers.get(worm_i).motivation > 35) {
+					if (tasks[worm_type][shift] > 0) {
+						workers.get(worm_i).previousTasks[shift] = worm_type;
+						tasks[worm_type][shift] -= 1;
+					} else {
+						for (int work_type = 0; work_type < 4; work_type++) {
+							// If a worm hasn't been allocated && there is a task for it to do
+							if (workers.get(worm_i).previousTasks[shift] == -1 &&
+									tasks[work_type][shift] > 0 &&
+									shift + 1 < N_SHIFTS) {
+								workers.get(worm_i).previousTasks[shift] = work_type;
+								workers.get(worm_i).previousTasks[shift + 1] = work_type;
+								tasks[work_type][shift] -= 1;
+								break;
+							}
+						}
+					}
+				}
+				if (workers.get(worm_i).previousTasks[shift] == TT_F) {
+					workers.get(worm_i).motivation += 1;
+					if (shift > 3 &&
+							workers.get(worm_i).previousTasks[shift - 1] == TT_F &&
+							workers.get(worm_i).previousTasks[shift - 2] == TT_F) {
+						workers.get(worm_i).motivation += 1;
+					}
+				} else {
+					workers.get(worm_i).motivation -= 1;
+
+					if (shift > 3 &&
+							workers.get(worm_i).previousTasks[shift - 1] != TT_F &&
+							workers.get(worm_i).previousTasks[shift - 2] != TT_F) {
+						workers.get(worm_i).motivation -= 1;
+					}
+				}
+
+			}
+		}
 
 		writeOutput(outputFile, workers);
+
 	}
 
 
