@@ -84,6 +84,8 @@ public class Main {
 				tasks[speciality][j] = Integer.parseInt(parts[j + 1]);
 			}
 		}
+		
+		br.close();
 	}
 	
 	static int charToIndex(char c) {
