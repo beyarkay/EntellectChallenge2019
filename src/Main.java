@@ -29,6 +29,20 @@ Uncompleted tasks move over to next shift
 
  */
 public class Main {
+	
+	//Worm types
+	static final int WT_B = 0; //Biochemist
+	static final int WT_M = 1; //Mechanical engineer
+	static final int WT_S = 2; //Space plumber
+	static final int WT_X = 3; //Xenobiologist
+	
+	//Specialities
+	static final int SP_D = 0; //Dome repair
+	static final int SP_R = 1; //Rover repair
+	static final int SP_P = 2; //Plumbing
+	static final int SP_A = 3; //Alien classification
+	
+	
 	public static void main(String[] args) {
 	
 	
