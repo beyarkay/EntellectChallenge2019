@@ -49,6 +49,8 @@ public class Main {
 	
 	static int[] workerCounts = new int[4]; //Count for number of each type of worker
 	
+	static int[][] tasks; //tasks[speciality][shift] = number of tasks for this speciality in this shift
+	
 	
 	public static void main(String[] args) throws IOException {
 		
