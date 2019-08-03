@@ -1,4 +1,5 @@
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 
 public class Worm {
@@ -12,6 +13,7 @@ public class Worm {
 	public Speciality speciality;
 	public int motivation = 15;
 	public Deque previousShifts = new ArrayDeque(15);
+	ArrayList<Integer> previousTasks;
 	
 	public Worm() {
 	

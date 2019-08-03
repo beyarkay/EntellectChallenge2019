@@ -61,7 +61,7 @@ public class Main {
 	static final int TT_P = 2; //Plumbing
 	static final int TT_A = 3; //Alien classification
 	
-	
+	//Input
 	static int[] workerCounts = new int[4]; //Count for number of each type of worker
 	static List<Worm> workers = new ArrayList<Worm>();
 	
@@ -70,10 +70,14 @@ public class Main {
 	static int N_SHIFTS; //total number of shifts
 	
 	
+	//Scheduler vars
+	static int[] remainingTasks = new int[4]; // 23, 43, 0, 3
+	
 	public static void main(String[] args) throws IOException {
 
 //		readInput(args[0]);
-		readInput("input/map_1.input");
+		readInput("input/map_5.input");
+		
 		
 		System.out.println("Done");
 		
