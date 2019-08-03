@@ -1,3 +1,4 @@
+import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class Worm {
@@ -8,16 +9,24 @@ public class Worm {
 		XENOBIOLOGIST
 	}
 	
-	
-	public int motivation;
-	public Deque previousShifts;
+	public Speciality speciality;
+	public int motivation = 15;
+	public Deque previousShifts = new ArrayDeque(15);
 	
 	public Worm() {
 	
 	}
 	
+	public Worm(Speciality speciality) {
+		this.speciality = speciality;
+	}
+	
 	public Worm(int motivation, Deque previousShifts) {
 		this.motivation = motivation;
+		this.previousShifts = previousShifts;
+	}
+	
+	public Worm(Deque previousShifts) {
 		this.previousShifts = previousShifts;
 	}
 	
@@ -28,4 +37,6 @@ public class Worm {
 				", previousShifts=" + previousShifts +
 				'}';
 	}
+	
+	
 }

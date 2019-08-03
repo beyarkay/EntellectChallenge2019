@@ -1,4 +1,0 @@
-B,D,D,F,D,D,F,
-B,D,F,F,D,F,F,
-M,R,F,F,R,R,F,
-M,R,F,F,R,R,F,

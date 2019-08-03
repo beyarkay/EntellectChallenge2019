@@ -1,5 +1,8 @@
 import java.io.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  Each task has a cost of 1 shift/unit
 Tasks cost double outside the worm speciality
@@ -27,7 +30,6 @@ Afternoon 3
 Night 0
 
 Uncompleted tasks move over to next shift
-
 <------------>
 
 Worms need a weekend (3 consecutive nothing shifts)
@@ -46,56 +48,83 @@ Complete all tasks
 One worm employed at the end at least
  */
 public class Main {
-
+	
 	//Worm types
 	static final int WT_B = 0; //Biochemist
 	static final int WT_M = 1; //Mechanical engineer
 	static final int WT_S = 2; //Space plumber
 	static final int WT_X = 3; //Xenobiologist
-
+	
 	//Specialities
 	static final int TT_D = 0; //Dome repair
 	static final int TT_R = 1; //Rover repair
 	static final int TT_P = 2; //Plumbing
 	static final int TT_A = 3; //Alien classification
-
-	/*
-	E.g:
-	* 2,3,4,5
-	* 588,7889,8792,2695
-	 */
+	
+	
 	static int[] workerCounts = new int[4]; //Count for number of each type of worker
-
+	static List<Worm> workers = new ArrayList<Worm>();
+	
 	static int[][] tasks; //tasks[speciality][shift] = number of tasks for this speciality in this shift
-
+	
 	static int N_SHIFTS; //total number of shifts
-
+	
+	
 	public static void main(String[] args) throws IOException {
-//        readInput(args[0]);
 
+//		readInput(args[0]);
+		readInput("input/map_1.input");
+		
+		System.out.println("Done");
+		
 		//Replace null with a char[][] array, formatted exactly like in the spec document
 		writeOutput("output/output.txt", null);
 	}
-
+	
 	public static void readInput(String fileName) throws IOException {
-
+		
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
-
+		
 		String[] parts = br.readLine().split(",");
-
+		
 		for (int i = 0; i < 4; i++) {
 			workerCounts[i] = Integer.parseInt(parts[i]);
 		}
+		
+		{
+			for (int j = 0; j < workerCounts[0]; j++) {
+				workers.add(new Worm(Worm.Speciality.BIOCHEMIST));
+			}
+			for (int j = 0; j < workerCounts[1]; j++) {
+				workers.add(new Worm(Worm.Speciality.MECHENGINEER));
+			}
+			for (int j = 0; j < workerCounts[2]; j++) {
+				workers.add(new Worm(Worm.Speciality.SPACEPLUMBER));
+			}
+			for (int j = 0; j < workerCounts[3]; j++) {
+				workers.add(new Worm(Worm.Speciality.XENOBIOLOGIST));
+			}
+		}
+		
 		parts = br.readLine().split(",");
-
+		
 		N_SHIFTS = parts.length - 1;
-
+		if (N_SHIFTS % 3 != 0) {
+			System.err.print("Incorrect number of shifts");
+			System.exit(-1);
+		}
+		
 		tasks = new int[4][N_SHIFTS];
-
+		
 		for (int i = 0; i < 4; i++) {
+			
 			int speciality = charToIndex(parts[0].charAt(0));
 			for (int j = 0; j < N_SHIFTS; j++) {
 				tasks[speciality][j] = Integer.parseInt(parts[j + 1]);
+			}
+			if (i != 3) {
+				parts = br.readLine().split(",");
+				
 			}
 		}
 
@@ -125,10 +154,9 @@ public class Main {
 
 		System.out.println("failure");
 		System.exit(-1);
-		return -1;
-	}
+		return -1;}
 
-	public static void writeOutput(String fileName, char[][] worms) throws IOException {
+    public static void writeOutput(String fileName, char[][] worms) throws IOException {
 
 
 		worms = new char[][]{{'B', 'D', 'D', 'F', 'D', 'D', 'F'},

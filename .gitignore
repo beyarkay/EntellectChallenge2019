@@ -1,6 +1,7 @@
 .idea
 *.iml
 output/
+bin/
 ### Java template
 # Compiled class file
 *.class
