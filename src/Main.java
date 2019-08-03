@@ -7,6 +7,11 @@ Worms CANNOT start a new task without completing the first
 
 All worms on break = penalty
 
+[B]iochemist - [D]ome repair
+[M]ech Eng - [R]over repair
+[S]pace plumber - [P]lumbing
+[X]enobiologist - [A]lien classification
+
 <-------------->
 
 3 shifts = day
