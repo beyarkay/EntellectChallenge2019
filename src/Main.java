@@ -50,7 +50,7 @@ Complete all tasks
 One worm employed at the end at least
  */
 public class Main {
-	
+
 	//Worm types
 	static final int WT_B = 0; //Biochemist
 	static final int WT_M = 1; //Mechanical engineer
@@ -68,57 +68,33 @@ public class Main {
 	//Input
 	static int[] workerCounts = new int[4]; //Count for number of each type of worker
 	static List<Worm> workers = new ArrayList<Worm>();
-	
+
 	static int[][] tasks; //tasks[speciality][shift] = number of tasks for this speciality in this shift
-	
+
 	static int N_SHIFTS; //total number of shifts
-	
-	
+
+
 	//Scheduler vars
 	static int[] remainingTasks = new int[4]; // 23, 43, 0, 3
 	static PriorityQueue<Worm>[] workerQueues = new PriorityQueue[4];
 	static ArrayList<Job> jobsList = new ArrayList<>();
-	
+
 	private static void runScheduler() {
 		while (doTasksRemain()) {
-
-
-			//Scheduling
-			for (int t = 0; t < 4; t++) {
-				//optimal worker while tasks and workers remain
-				while (remainingTasks[t] != 0 && !workerQueues[t].isEmpty()) {
-					//add
-				}
-
-				int i = 0;
-				while (remainingTasks[t] != 0 && hasRemainingWorkers()) {
-					if (!workerQueues[i].isEmpty()) {
-						//add worker from queue i to job queue
-					}
-
-					i = (i + 1) % 4;
-
-				}
-
-			}
+			//1 find optimal workers
+//			while(remainingTasks[0] != 0 && workersB)
+//			{
+//
+//			}
 			//2 assign all workers
 		}
-	}
-
-	private static boolean hasRemainingWorkers() {
-		for (int i = 0; i < 4; i++) {
-			if (!workerQueues[i].isEmpty())
-				return true;
-		}
-
-		return false;
 	}
 
 	private static boolean doTasksRemain() {
 		return true; //TODO fixme
 	}
-	
-	
+
+
 	public static void main(String[] args) throws IOException {
 
 		String[] inFiles = new String[]{
@@ -135,7 +111,7 @@ public class Main {
 				"output/map_4.txt",
 				"output/map_5.txt"
 		};
-		DEBUG = false;
+		DEBUG = true;
 		for (int i = 0; i < inFiles.length; i++) {
 			readInput(inFiles[i]);
 			System.out.println("Done Reading file " + inFiles[i]);
@@ -145,51 +121,53 @@ public class Main {
 
 		}
 	}
-	
+
 	public static void readInput(String fileName) throws IOException {
-		
+		workers = new ArrayList<Worm>();
+
+
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
-		
+
 		String[] parts = br.readLine().split(",");
-		
+
 		for (int i = 0; i < 4; i++) {
 			workerCounts[i] = Integer.parseInt(parts[i]);
 		}
-		
-		{
-			for (int j = 0; j < workerCounts[0]; j++) {
-				workers.add(new Worm(Worm.Speciality.BIOCHEMIST));
-			}
-			for (int j = 0; j < workerCounts[1]; j++) {
-				workers.add(new Worm(Worm.Speciality.MECHENGINEER));
-			}
-			for (int j = 0; j < workerCounts[2]; j++) {
-				workers.add(new Worm(Worm.Speciality.SPACEPLUMBER));
-			}
-			for (int j = 0; j < workerCounts[3]; j++) {
-				workers.add(new Worm(Worm.Speciality.XENOBIOLOGIST));
-			}
-		}
-		
 		parts = br.readLine().split(",");
-		
+
 		N_SHIFTS = parts.length - 1;
+
+		for (int j = 0; j < workerCounts[0]; j++) {
+			workers.add(new Worm(Worm.Speciality.BIOCHEMIST, N_SHIFTS));
+		}
+		for (int j = 0; j < workerCounts[1]; j++) {
+			workers.add(new Worm(Worm.Speciality.MECHENGINEER, N_SHIFTS));
+		}
+		for (int j = 0; j < workerCounts[2]; j++) {
+			workers.add(new Worm(Worm.Speciality.SPACEPLUMBER, N_SHIFTS));
+		}
+		for (int j = 0; j < workerCounts[3]; j++) {
+			workers.add(new Worm(Worm.Speciality.XENOBIOLOGIST, N_SHIFTS));
+		}
+
+
+
 		if (N_SHIFTS % 3 != 0) {
 			System.err.print("Incorrect number of shifts");
 			System.exit(-1);
 		}
-		
+
 		tasks = new int[4][N_SHIFTS];
-		
+
 		for (int i = 0; i < 4; i++) {
-			
+
 			int speciality = charToIndex(parts[0].charAt(0));
 			for (int j = 0; j < N_SHIFTS; j++) {
 				tasks[speciality][j] = Integer.parseInt(parts[j + 1]);
 			}
 			if (i != 3) {
 				parts = br.readLine().split(",");
-				
+
 			}
 		}
 
@@ -287,61 +265,70 @@ public class Main {
 	Boyd Minimum Viable Product
 	 */
 	public static void mvp(String outputFile) throws IOException {
-		int totalWorkers = 0;
-		for (int workerCount : workerCounts) {
-			totalWorkers += workerCount;
-		}
+		int totalWorkers = workers.size();
+//		for (int workerCount : workerCounts) {
+//			totalWorkers += workerCount;
+//		}
 
-		int[][] worms = new int[totalWorkers][N_SHIFTS + 1];
-		for (int i = 0; i < worms.length; i++) {
-			Arrays.fill(worms[i], -1);
-		}
-		int count = 0;
-		for (int i = 0; i < workerCounts.length; i++) {
-			// The first character of each line is just the Worker type, so add it in
-			// 'i' is the int constant for that Worker Type ()
-			for (int j = 0; j < workerCounts[i]; j++) {
-				worms[count][0] = i;
-				count++;
-			}
-		}
+//		int[][] workers = new int[totalWorkers][N_SHIFTS + 1];
 
 
-		for (int worm_i = 0; worm_i < worms.length; worm_i++) {
+//		for (int i = 0; i < workers.length; i++) {
+//			Arrays.fill(workers[i], -1);
+//		}
+//		int count = 0;
+//		for (int i = 0; i < workerCounts.length; i++) {
+//			// The first character of each line is just the Worker type, so add it in
+//			// 'i' is the int constant for that Worker Type ()
+//			for (int j = 0; j < workerCounts[i]; j++) {
+//				workers[count][0] = i;
+//				count++;
+//			}
+//		}
+
+		for (int worm_i = 0; worm_i < workers.size(); worm_i++) {
 
 			if (DEBUG) {
-				System.out.println(String.format("Wormid %d / %d", worm_i, worms.length));
+				System.out.println(String.format("Wormid %d / %d", worm_i, workers.size()));
 			}// Check if the worm can do a task of it's speciality
 			for (int shift = 0; shift < N_SHIFTS; shift++) {
-				int worm_type = worms[worm_i][0];
-				if (tasks[worm_type][shift] > 0) {
-					worms[worm_i][shift] = worm_type;
+				int worm_type = workers.get(worm_i).speciality.ordinal();
 
+				//TODO: Get rid of tasks
+//				System.out.print(N_SHIFTS);
+//				System.out.print(" - ");
+//				System.out.println(workers.get(worm_i).previousTasks.length);
+//				System.out.println();
+				if (tasks[worm_type][shift] > 0) {
+					workers.get(worm_i).previousTasks[shift] = worm_type;
+//					workers[worm_i][shift] = worm_type;
 				}
 			}
-			// Now check again to allocate all the remaining worms
+			// Now check again to allocate all the remaining workers
 			for (int shift = 0; shift < N_SHIFTS; shift++) {
-				int worm_type = worms[worm_i][0];
+				int worm_type = workers.get(worm_i).speciality.ordinal();
 
 				for (int work_type = 0; work_type < 4; work_type++) {
 					// If a worm hasn't been allocated && there is a task for it to do
-					if (worms[worm_i][shift] != -1 && tasks[work_type][shift] > 0) {
-						worms[worm_i][shift] = work_type;
+					if (workers.get(worm_i).previousTasks[shift] != -1 && tasks[work_type][shift] > 0) {
+						workers.get(worm_i).previousTasks[shift] = work_type;
 						break;
-
 					}
+
 				}
 			}
 		}
+
 		char[][] wormsToWrite = new char[totalWorkers][N_SHIFTS + 1];
 
-		for (int i = 0; i < worms.length; i++) {
-			wormsToWrite[i][0] = WTToChar(worms[i][0]);
+		for (int i = 0; i < workers.size(); i++) {
+			wormsToWrite[i][0] = WTToChar(workers.get(i).speciality.ordinal());
 
-			for (int j = 1; j < worms[i].length; j++) {
-				wormsToWrite[i][j] = TTToChar(worms[i][j]);
+			for (int j = 1; j < workers.get(i).previousTasks.length; j++) {
+				wormsToWrite[i][j] = TTToChar(workers.get(i).previousTasks[j]);
 			}
 		}
+
 		writeOutput(outputFile, wormsToWrite);
 	}
 
