@@ -50,7 +50,7 @@ Complete all tasks
 One worm employed at the end at least
  */
 public class Main {
-
+	
 	//Worm types
 	static final int WT_B = 0; //Biochemist
 	static final int WT_M = 1; //Mechanical engineer
@@ -68,36 +68,57 @@ public class Main {
 	//Input
 	static int[] workerCounts = new int[4]; //Count for number of each type of worker
 	static List<Worm> workers = new ArrayList<Worm>();
-
+	
 	static int[][] tasks; //tasks[speciality][shift] = number of tasks for this speciality in this shift
-
+	
 	static int N_SHIFTS; //total number of shifts
-
-
+	
+	
 	//Scheduler vars
 	static int[] remainingTasks = new int[4]; // 23, 43, 0, 3
-	static PriorityQueue<Worm> workersB = new PriorityQueue<>();
-	static PriorityQueue<Worm> workersM = new PriorityQueue<>();
-	static PriorityQueue<Worm> workersS = new PriorityQueue<>();
-	static PriorityQueue<Worm> workersX = new PriorityQueue<>();
+	static PriorityQueue<Worm>[] workerQueues = new PriorityQueue[4];
 	static ArrayList<Job> jobsList = new ArrayList<>();
-
+	
 	private static void runScheduler() {
 		while (doTasksRemain()) {
-			//1 find optimal workers
-//			while(remainingTasks[0] != 0 && workersB)
-//			{
-//
-//			}
+
+
+			//Scheduling
+			for (int t = 0; t < 4; t++) {
+				//optimal worker while tasks and workers remain
+				while (remainingTasks[t] != 0 && !workerQueues[t].isEmpty()) {
+					//add
+				}
+
+				int i = 0;
+				while (remainingTasks[t] != 0 && hasRemainingWorkers()) {
+					if (!workerQueues[i].isEmpty()) {
+						//add worker from queue i to job queue
+					}
+
+					i = (i + 1) % 4;
+
+				}
+
+			}
 			//2 assign all workers
 		}
+	}
+
+	private static boolean hasRemainingWorkers() {
+		for (int i = 0; i < 4; i++) {
+			if (!workerQueues[i].isEmpty())
+				return true;
+		}
+
+		return false;
 	}
 
 	private static boolean doTasksRemain() {
 		return true; //TODO fixme
 	}
-
-
+	
+	
 	public static void main(String[] args) throws IOException {
 
 		String[] inFiles = new String[]{
@@ -124,17 +145,17 @@ public class Main {
 
 		}
 	}
-
+	
 	public static void readInput(String fileName) throws IOException {
-
+		
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
-
+		
 		String[] parts = br.readLine().split(",");
-
+		
 		for (int i = 0; i < 4; i++) {
 			workerCounts[i] = Integer.parseInt(parts[i]);
 		}
-
+		
 		{
 			for (int j = 0; j < workerCounts[0]; j++) {
 				workers.add(new Worm(Worm.Speciality.BIOCHEMIST));
@@ -149,26 +170,26 @@ public class Main {
 				workers.add(new Worm(Worm.Speciality.XENOBIOLOGIST));
 			}
 		}
-
+		
 		parts = br.readLine().split(",");
-
+		
 		N_SHIFTS = parts.length - 1;
 		if (N_SHIFTS % 3 != 0) {
 			System.err.print("Incorrect number of shifts");
 			System.exit(-1);
 		}
-
+		
 		tasks = new int[4][N_SHIFTS];
-
+		
 		for (int i = 0; i < 4; i++) {
-
+			
 			int speciality = charToIndex(parts[0].charAt(0));
 			for (int j = 0; j < N_SHIFTS; j++) {
 				tasks[speciality][j] = Integer.parseInt(parts[j + 1]);
 			}
 			if (i != 3) {
 				parts = br.readLine().split(",");
-
+				
 			}
 		}
 
