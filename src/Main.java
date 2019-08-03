@@ -133,10 +133,10 @@ public class Main {
 	public static void writeOutput(String fileName, char[][] worms) throws IOException {
 
 
-//        worms = new char[][]{{'B', 'D', 'D', 'F', 'D', 'D', 'F'},
-//                             {'B', 'D', 'F', 'F', 'D', 'F', 'F'},
-//                             {'M', 'R', 'F', 'F', 'R', 'R', 'F'},
-//                             {'M', 'R', 'F', 'F', 'R', 'R', 'F'}};
+		worms = new char[][]{{'B', 'D', 'D', 'F', 'D', 'D', 'F'},
+				{'B', 'D', 'F', 'F', 'D', 'F', 'F'},
+				{'M', 'R', 'F', 'F', 'R', 'R', 'F'},
+				{'M', 'R', 'F', 'F', 'R', 'R', 'F'}};
 
 		StringBuilder outputString = new StringBuilder("");
 
@@ -145,7 +145,7 @@ public class Main {
 		for (int wormIndex = 0; wormIndex < worms.length; wormIndex++) {
 			outputString = new StringBuilder();
 			for (int shiftIndex = 0; shiftIndex < worms[wormIndex].length; shiftIndex++) {
-				outputString.append(worms[wormIndex][shiftIndex]).append(",");
+				outputString.append(worms[wormIndex][shiftIndex]);
 			}
 			pw.println(String.valueOf(outputString));
 		}
@@ -157,6 +157,22 @@ public class Main {
 	Boyd Minimum Viable Product
 	 */
 	public void mvp() {
+		int totalWorkers = 0;
+		for (int workerCount : workerCounts) {
+			totalWorkers = +workerCount;
+		}
+
+		char[][] worms = new char[totalWorkers][N_SHIFTS + 1];
+
+//		for (int i = 0; i < worms.length; i++) {
+//			for (int j = 0; j < worms[i].length; j++) {
+//				worms[i][j]
+//
+//			}
+//		}
+
+
+
 		for (int i = 0; i < workerCounts.length; i++) {
 			for (int specialityIndex = 0; specialityIndex < tasks.length; specialityIndex++) {
 				for (int shiftIndex = 0; shiftIndex < tasks[specialityIndex].length; shiftIndex++) {
