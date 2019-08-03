@@ -76,10 +76,12 @@ public class Main {
 //		readInput(args[0]);
 		readInput("input/map_1.input");
 
-		System.out.println("Done");
+		System.out.println("Done Reading");
 
-		//Replace null with a char[][] array, formatted exactly like in the spec document
-		writeOutput("output/output.txt", null);
+		mvp();
+
+
+//		writeOutput("output/output.txt", null);
 	}
 
 	public static void readInput(String fileName) throws IOException {
@@ -158,7 +160,7 @@ public class Main {
 		return -1;
 	}
 
-	static int WTToChar(int i) {
+	static char WTToChar(int i) {
 		switch (i) {
 			case WT_B:
 				return 'B';
@@ -171,11 +173,11 @@ public class Main {
 			default:
 				System.out.println("failure");
 				System.exit(-1);
-				return -1;
+				return '!';
 		}
 	}
 
-	static int TTToChar(int i) {
+	static char TTToChar(int i) {
 		switch (i) {
 			case TT_D:
 				return 'D';
@@ -188,7 +190,7 @@ public class Main {
 			default:
 				System.out.println("failure");
 				System.exit(-1);
-				return -1;
+				return '!';
 		}
 	}
 
@@ -219,22 +221,21 @@ public class Main {
 	/*
 	Boyd Minimum Viable Product
 	 */
-	public void mvp() {
+	public static void mvp() throws IOException {
 		int totalWorkers = 0;
 		for (int workerCount : workerCounts) {
-			totalWorkers = +workerCount;
+			totalWorkers += workerCount;
 		}
 
 		int[][] worms = new int[totalWorkers][N_SHIFTS + 1];
 		for (int i = 0; i < worms.length; i++) {
 			Arrays.fill(worms[i], -1);
 		}
-
 		for (int i = 0; i < workerCounts.length; i++) {
 			// The first character of each line is just the Worker type, so add it in
 			// 'i' is the int constant for that Worker Type ()
 			for (int j = 0; j < workerCounts[i]; j++) {
-				worms[i + j][0] = i;
+				worms[i * workerCounts[i] + j][0] = i;
 			}
 		}
 
@@ -262,7 +263,16 @@ public class Main {
 				}
 			}
 		}
-//		writeOutput();
+		char[][] wormsToWrite = new char[totalWorkers][N_SHIFTS + 1];
+
+		for (int i = 0; i < worms.length; i++) {
+			wormsToWrite[i][0] = WTToChar(worms[i][0]);
+
+			for (int j = 1; j < worms[i].length; j++) {
+				wormsToWrite[i][j] = TTToChar(worms[i][j]);
+			}
+		}
+		writeOutput("output/output.txt", wormsToWrite);
 	}
 
 
