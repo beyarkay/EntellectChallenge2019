@@ -2,6 +2,7 @@ import java.io.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /*
  Each task has a cost of 1 shift/unit
@@ -72,18 +73,41 @@ public class Main {
 	
 	//Scheduler vars
 	static int[] remainingTasks = new int[4]; // 23, 43, 0, 3
+	static PriorityQueue<Worm> workersB = new PriorityQueue<>();
+	static PriorityQueue<Worm> workersM = new PriorityQueue<>();
+	static PriorityQueue<Worm> workersS = new PriorityQueue<>();
+	static PriorityQueue<Worm> workersX = new PriorityQueue<>();
+	static ArrayList<Job> jobsList = new ArrayList<>();
+	
+	private static void runScheduler() {
+		while(doTasksRemain()){
+			//1 find optimal workers
+//			while(remainingTasks[0] != 0 && workersB)
+//			{
+//
+//			}
+			//2 assign all workers
+		}
+	}
+	
+	private static boolean doTasksRemain() {
+		return true; //TODO fixme
+	}
+	
 	
 	public static void main(String[] args) throws IOException {
 
 //		readInput(args[0]);
 		readInput("input/map_5.input");
 		
-		
+		runScheduler();
 		System.out.println("Done");
 		
 		//Replace null with a char[][] array, formatted exactly like in the spec document
 		writeOutput("output/output.txt", null);
 	}
+	
+	
 	
 	public static void readInput(String fileName) throws IOException {
 		

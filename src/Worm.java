@@ -2,7 +2,13 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 
-public class Worm {
+public class Worm implements Comparable {
+	
+	@Override
+	public int compareTo(Object o) {
+		return 0; //TODO COMPARABLE METHOD
+	}
+	
 	public enum Speciality {
 		BIOCHEMIST,
 		MECHENGINEER,
@@ -14,6 +20,7 @@ public class Worm {
 	public int motivation = 15;
 	public Deque previousShifts = new ArrayDeque(15);
 	ArrayList<Integer> previousTasks;
+	public Job currentJob;
 	
 	public Worm() {
 	
