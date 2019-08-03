@@ -1,7 +1,5 @@
 import java.io.*;
 
-import java.util.ArrayList;
-
 /*
  Each task has a cost of 1 shift/unit
 Tasks cost double outside the worm speciality
@@ -56,10 +54,10 @@ public class Main {
 	static final int WT_X = 3; //Xenobiologist
 
 	//Specialities
-	static final int SP_D = 0; //Dome repair
-	static final int SP_R = 1; //Rover repair
-	static final int SP_P = 2; //Plumbing
-	static final int SP_A = 3; //Alien classification
+	static final int TT_D = 0; //Dome repair
+	static final int TT_R = 1; //Rover repair
+	static final int TT_P = 2; //Plumbing
+	static final int TT_A = 3; //Alien classification
 
 	/*
 	E.g:
@@ -116,13 +114,13 @@ public class Main {
 				return WT_X;
 
 			case 'D':
-				return SP_D;
+				return TT_D;
 			case 'R':
-				return SP_R;
+				return TT_R;
 			case 'P':
-				return SP_P;
+				return TT_P;
 			case 'A':
-				return SP_A;
+				return TT_A;
 		}
 
 		System.out.println("failure");
@@ -162,11 +160,12 @@ public class Main {
 			totalWorkers = +workerCount;
 		}
 
-		char[][] worms = new char[totalWorkers][N_SHIFTS + 1];
+		int[][] worms = new int[totalWorkers][N_SHIFTS + 1];
 
-//		for (int i = 0; i < worms.length; i++) {
-//			for (int j = 0; j < worms[i].length; j++) {
-//				worms[i][j]
+
+//		for (int i = 0; i < workerCounts.length; i++) {
+//			for (int j = 1; j < workerCounts[i]; j++) {
+//				worms[i][0] = SP
 //
 //			}
 //		}
