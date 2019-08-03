@@ -30,7 +30,22 @@ Night 0
 
 Uncompleted tasks move over to next shift
 
+<------------>
 
+Worms need a weekend (3 consecutive nothing shifts)
+Worms MUST take a WEEKEND or they RESIGN after 5 days with any shift worked
+Worms MUST work once every 5 days
+Worms MUST NOT have more than 42 motivation
+
+<--------->
+
+Points:
+Worms remaining motivation
+Completing tasks as close to on time as possible
+
+Validity:
+Complete all tasks
+One worm employed at the end at least
  */
 public class Main {
 	
