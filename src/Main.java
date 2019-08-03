@@ -74,9 +74,16 @@ public class Main {
 		
 		parts = br.readLine().split(",");
 		
-		tasks = new int[4][parts.length - 1];
+		N_SHIFTS = parts.length - 1;
 		
+		tasks = new int[4][N_SHIFTS];
 		
+		for (int i = 0; i < 4; i++) {
+			int speciality = charToIndex(parts[0].charAt(0));
+			for (int j = 0; j < N_SHIFTS; j++) {
+				tasks[speciality][j] = Integer.parseInt(parts[j + 1]);
+			}
+		}
 	}
 	
 	static int charToIndex(char c) {
