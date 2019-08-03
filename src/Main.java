@@ -30,22 +30,7 @@ Night 0
 
 Uncompleted tasks move over to next shift
 
-<------------>
 
-Worms need a weekend (3 consecutive nothing shifts)
-Worms MUST take a WEEKEND or they RESIGN after 5 days with any shift worked
-Worms MUST work once every 5 days
-Worms MUST NOT have more than 42 motivation
-
-<--------->
-
-Points:
-Worms remaining motivation
-Completing tasks as close to on time as possible
-
-Validity:
-Complete all tasks
-One worm employed at the end at least
  */
 public class Main {
 	
@@ -66,6 +51,8 @@ public class Main {
 	
 	static int[][] tasks; //tasks[speciality][shift] = number of tasks for this speciality in this shift
 	
+	static int N_SHIFTS; //total number of shifts
+	
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -84,5 +71,44 @@ public class Main {
 		for (int i = 0; i < 4; i++) {
 			workerCounts[i] = Integer.parseInt(parts[i]);
 		}
+		
+		parts = br.readLine().split(",");
+		
+		N_SHIFTS = parts.length - 1;
+		
+		tasks = new int[4][N_SHIFTS];
+		
+		for (int i = 0; i < 4; i++) {
+			int speciality = charToIndex(parts[0].charAt(0));
+			for (int j = 0; j < N_SHIFTS; j++) {
+				tasks[speciality][j] = Integer.parseInt(parts[j + 1]);
+			}
+		}
+	}
+	
+	static int charToIndex(char c) {
+		switch (c) {
+			case 'B':
+				return WT_B;
+			case 'M':
+				return WT_M;
+			case 'S':
+				return WT_S;
+			case 'X':
+				return WT_X;
+				
+			case 'D':
+				return SP_D;
+			case 'R':
+				return SP_R;
+			case 'P':
+				return SP_P;
+			case 'A':
+				return SP_A;
+		}
+		
+		System.out.println("failure");
+		System.exit(-1);
+		return -1;
 	}
 }
