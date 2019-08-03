@@ -31,8 +31,8 @@ Uncompleted tasks move over to next shift
 <------------>
 
 Worms need a weekend (3 consecutive nothing shifts)
-Worms MUST take a WEEKEND or they RESIGN after 5 days with any shift worked
-Worms MUST work once every 5 days
+Worms MUST rest 3 consecutive shifts or they RESIGN after 15 shifts with any shift worked
+Worms MUST work once every 15 shifts
 Worms MUST NOT have more than 42 motivation
 
 <--------->
@@ -72,22 +72,83 @@ public class Main {
 
 	//Scheduler vars
 	static int[] remainingTasks = new int[4]; // 23, 43, 0, 3
-	static PriorityQueue<Worm>[] workerQueues = new PriorityQueue[4];
+	static Queue<Worm>[] workerQueues = new ArrayDeque[4];
 	static ArrayList<Job> jobsList = new ArrayList<>();
 
 	private static void runScheduler() {
+
+		int shiftNumber = 0;
 		while (doTasksRemain()) {
-			//1 find optimal workers
-//			while(remainingTasks[0] != 0 && workersB)
-//			{
-//
-//			}
-			//2 assign all workers
+
+			if (shiftNumber < N_SHIFTS) {
+				for (int i = 0; i < 4; i++) {
+					remainingTasks[i] += tasks[i][shiftNumber];
+				}
+				shiftNumber++;
+			}
+
+			//Scheduling
+			for (int t = 0; t < 4; t++) {
+				//optimal worker while tasks and workers remain
+				while (remainingTasks[t] != 0 && !workerQueues[t].isEmpty()) {
+					remainingTasks[t]--;
+
+					//add worker from queue t to job queue
+					Job job = new Job(t);
+					job.worker = workerQueues[t].poll();
+
+					job.shiftsRemaining = 1;
+
+					jobsList.add(job);
+				}
+
+				int i = 0;
+				while (remainingTasks[t] != 0 && hasRemainingWorkers()) {
+					if (!workerQueues[i].isEmpty()) {
+						remainingTasks[t]--;
+
+						//add worker from queue i to job queue
+						Job job = new Job(t);
+						job.worker = workerQueues[i].poll();
+
+						job.shiftsRemaining = 2;
+
+						jobsList.add(job);
+					}
+
+					i = (i + 1) % 4;
+
+				}
+
+			}
+
+			//Run 1 shift simulation
+
+			for (int i = 0; i < jobsList.size(); i++) {
+				Job job = jobsList.get(i);
+				job.doIt(shiftNumber); //NOTHING IS IMPOSSIBLE
+
+				if (job.isDone()) {
+					//add worker to worker queue
+					workerQueues[job.worker.speciality.ordinal()].add(job.worker);
+					jobsList.remove(i); //TODO check whether i must be changed after this
+					i--;
+				}
+			}
 		}
 	}
 
+	private static boolean hasRemainingWorkers() {
+		for (int i = 0; i < 4; i++) {
+			if (!workerQueues[i].isEmpty())
+				return true;
+		}
+
+		return false;
+	}
+
 	private static boolean doTasksRemain() {
-		return true; //TODO fixme
+		return ((remainingTasks[0] + remainingTasks[1] + remainingTasks[2] + remainingTasks[3]) == 0) && jobsList.isEmpty();
 	}
 
 
@@ -120,6 +181,15 @@ public class Main {
 //			}
 
 		}
+		for(Worm w : workers){
+			int wormType = w.speciality.ordinal();
+			workerQueues[wormType].add(w);
+		}
+		runScheduler();
+		System.out.println("Done");
+
+		//Replace null with a char[][] array, formatted exactly like in the spec document
+		writeOutput("output/output5.txt", workers);
 	}
 
 	public static void readInput(String fileName) throws IOException {
@@ -259,6 +329,7 @@ public class Main {
 		PrintWriter pw = new PrintWriter(new FileWriter(fileName));
 
 		System.out.println("Worms: " + wormsToWrite.length);
+
 		for (int wormIndex = 0; wormIndex < wormsToWrite.length; wormIndex++) {
 			outputString = new StringBuilder();
 			for (int shiftIndex = 0; shiftIndex < wormsToWrite[wormIndex].length; shiftIndex++) {
@@ -306,7 +377,7 @@ public class Main {
 
 				if (tasks[worm_type][shift] > 0 && workers.get(worm_i).previousTasks[shift] == TT_F) {
 					workers.get(worm_i).previousTasks[shift] = worm_type;
-					tasks[worm_type][shift] -= 1;
+//					workers[worm_i][shift] = worm_type;
 				}
 			}
 
@@ -375,12 +446,9 @@ public class Main {
 						workers.get(worm_i).motivation -= 1;
 					}
 				}
-
 			}
 		}
-
 		writeOutput(outputFile, workers);
-
 	}
 
 
