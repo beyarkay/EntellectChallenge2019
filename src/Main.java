@@ -98,14 +98,16 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 
 		String[] inFiles = new String[]{
-				"input/map_1.input",
+				"input/map_1.input"
+				,
 				"input/map_2.input",
 				"input/map_3.input",
 				"input/map_4.input",
 				"input/map_5.input"
 		};
 		String[] outFiles = new String[]{
-				"output/map_1.txt",
+				"output/map_1.txt"
+				,
 				"output/map_2.txt",
 				"output/map_3.txt",
 				"output/map_4.txt",
@@ -117,7 +119,9 @@ public class Main {
 			System.out.println("Done Reading file " + inFiles[i]);
 			mvp(outFiles[i]);
 			System.out.println("Done MVPing file " + inFiles[i] + "\n");
-
+//			if (DEBUG) {
+//				break;
+//			}
 
 		}
 	}
@@ -149,7 +153,6 @@ public class Main {
 		for (int j = 0; j < workerCounts[3]; j++) {
 			workers.add(new Worm(Worm.Speciality.XENOBIOLOGIST, N_SHIFTS));
 		}
-
 
 
 		if (N_SHIFTS % 3 != 0) {
@@ -324,8 +327,8 @@ public class Main {
 		for (int i = 0; i < workers.size(); i++) {
 			wormsToWrite[i][0] = WTToChar(workers.get(i).speciality.ordinal());
 
-			for (int j = 1; j < workers.get(i).previousTasks.length; j++) {
-				wormsToWrite[i][j] = TTToChar(workers.get(i).previousTasks[j]);
+			for (int j = 0; j < workers.get(i).previousTasks.length; j++) {
+				wormsToWrite[i][j + 1] = TTToChar(workers.get(i).previousTasks[j]);
 			}
 		}
 
