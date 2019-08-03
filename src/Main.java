@@ -1,9 +1,5 @@
 import java.io.*;
-import java.util.Arrays;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /*
  Each task has a cost of 1 shift/unit
@@ -241,22 +237,31 @@ public class Main {
 	}
 
 
-	public static void writeOutput(String fileName, char[][] worms) throws IOException {
+	public static void writeOutput(String fileName, List<Worm> wormsQ) throws IOException {
 
 
 //		worms = new char[][]{{'B', 'D', 'D', 'F', 'D', 'D', 'F'},
 //				{'B', 'D', 'F', 'F', 'D', 'F', 'F'},
 //				{'M', 'R', 'F', 'F', 'R', 'R', 'F'},
 //				{'M', 'R', 'F', 'F', 'R', 'R', 'F'}};
+		char[][] wormsToWrite = new char[wormsQ.size()][N_SHIFTS + 1];
+
+		for (int i = 0; i < workers.size(); i++) {
+			wormsToWrite[i][0] = WTToChar(workers.get(i).speciality.ordinal());
+
+			for (int j = 0; j < workers.get(i).previousTasks.length; j++) {
+				wormsToWrite[i][j + 1] = TTToChar(workers.get(i).previousTasks[j]);
+			}
+		}
 
 		StringBuilder outputString = new StringBuilder("");
 
 		PrintWriter pw = new PrintWriter(new FileWriter(fileName));
 
-		for (int wormIndex = 0; wormIndex < worms.length; wormIndex++) {
+		for (int wormIndex = 0; wormIndex < wormsToWrite.length; wormIndex++) {
 			outputString = new StringBuilder();
-			for (int shiftIndex = 0; shiftIndex < worms[wormIndex].length; shiftIndex++) {
-				outputString.append(worms[wormIndex][shiftIndex]);
+			for (int shiftIndex = 0; shiftIndex < wormsToWrite[wormIndex].length; shiftIndex++) {
+				outputString.append(wormsToWrite[wormIndex][shiftIndex]);
 			}
 			pw.println(String.valueOf(outputString));
 		}
@@ -322,17 +327,17 @@ public class Main {
 			}
 		}
 
-		char[][] wormsToWrite = new char[totalWorkers][N_SHIFTS + 1];
+//		char[][] wormsToWrite = new char[totalWorkers][N_SHIFTS + 1];
+//
+//		for (int i = 0; i < workers.size(); i++) {
+//			wormsToWrite[i][0] = WTToChar(workers.get(i).speciality.ordinal());
+//
+//			for (int j = 0; j < workers.get(i).previousTasks.length; j++) {
+//				wormsToWrite[i][j + 1] = TTToChar(workers.get(i).previousTasks[j]);
+//			}
+//		}
 
-		for (int i = 0; i < workers.size(); i++) {
-			wormsToWrite[i][0] = WTToChar(workers.get(i).speciality.ordinal());
-
-			for (int j = 0; j < workers.get(i).previousTasks.length; j++) {
-				wormsToWrite[i][j + 1] = TTToChar(workers.get(i).previousTasks[j]);
-			}
-		}
-
-		writeOutput(outputFile, wormsToWrite);
+		writeOutput(outputFile, workers);
 	}
 
 
