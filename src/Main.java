@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import java.util.ArrayList;
 
@@ -74,7 +72,10 @@ public class Main {
 
 static int N_SHIFTS; //total number of shifts
     public static void main(String[] args) throws IOException {
-        readInput(args[0]);
+//        readInput(args[0]);
+
+	    //Replace null with a char[][] array, formatted exactly like in the spec document
+        writeOutput("output/output.txt", null);
     }
 
     public static void readInput(String fileName) throws IOException {
@@ -127,6 +128,28 @@ static int N_SHIFTS; //total number of shifts
 		System.exit(-1);
 		return -1;}
 
+    public static void writeOutput(String fileName, char[][] worms) throws IOException {
+
+
+//        worms = new char[][]{{'B', 'D', 'D', 'F', 'D', 'D', 'F'},
+//                             {'B', 'D', 'F', 'F', 'D', 'F', 'F'},
+//                             {'M', 'R', 'F', 'F', 'R', 'R', 'F'},
+//                             {'M', 'R', 'F', 'F', 'R', 'R', 'F'}};
+
+        StringBuilder outputString = new StringBuilder("");
+
+        PrintWriter pw = new PrintWriter(new FileWriter(fileName));
+
+        for (int wormIndex = 0; wormIndex < worms.length; wormIndex++) {
+            outputString = new StringBuilder();
+            for (int shiftIndex = 0; shiftIndex < worms[wormIndex].length; shiftIndex++) {
+                outputString.append(worms[wormIndex][shiftIndex]).append(",");
+            }
+            pw.println(String.valueOf(outputString));
+        }
+
+        pw.close();
+    }
 
 
     /*
@@ -134,8 +157,14 @@ static int N_SHIFTS; //total number of shifts
      */
     public void mvp() {
         for (int i = 0; i < workerCounts.length; i++) {
-
+            for (int specialityIndex = 0; specialityIndex < tasks.length; specialityIndex++) {
+                for (int shiftIndex = 0; shiftIndex < tasks[specialityIndex].length; shiftIndex++) {
+                    break;
+                }
+            }
 
         }
     }
+
+
 }
