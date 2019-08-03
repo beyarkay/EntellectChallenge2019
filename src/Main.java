@@ -49,45 +49,46 @@ One worm employed at the end at least
  */
 public class Main {
 
-    //Worm types
-    static final int WT_B = 0; //Biochemist
-    static final int WT_M = 1; //Mechanical engineer
-    static final int WT_S = 2; //Space plumber
-    static final int WT_X = 3; //Xenobiologist
+	//Worm types
+	static final int WT_B = 0; //Biochemist
+	static final int WT_M = 1; //Mechanical engineer
+	static final int WT_S = 2; //Space plumber
+	static final int WT_X = 3; //Xenobiologist
 
-    //Specialities
-    static final int SP_D = 0; //Dome repair
-    static final int SP_R = 1; //Rover repair
-    static final int SP_P = 2; //Plumbing
-    static final int SP_A = 3; //Alien classification
+	//Specialities
+	static final int SP_D = 0; //Dome repair
+	static final int SP_R = 1; //Rover repair
+	static final int SP_P = 2; //Plumbing
+	static final int SP_A = 3; //Alien classification
 
-    /*
-    E.g:
-    * 2,3,4,5
-    * 588,7889,8792,2695
-     */
-    static int[] workerCounts = new int[4]; //Count for number of each type of worker
+	/*
+	E.g:
+	* 2,3,4,5
+	* 588,7889,8792,2695
+	 */
+	static int[] workerCounts = new int[4]; //Count for number of each type of worker
 
-    static int[][] tasks; //tasks[speciality][shift] = number of tasks for this speciality in this shift
+	static int[][] tasks; //tasks[speciality][shift] = number of tasks for this speciality in this shift
 
-static int N_SHIFTS; //total number of shifts
-    public static void main(String[] args) throws IOException {
+	static int N_SHIFTS; //total number of shifts
+
+	public static void main(String[] args) throws IOException {
 //        readInput(args[0]);
 
-	    //Replace null with a char[][] array, formatted exactly like in the spec document
-        writeOutput("output/output.txt", null);
-    }
+		//Replace null with a char[][] array, formatted exactly like in the spec document
+		writeOutput("output/output.txt", null);
+	}
 
-    public static void readInput(String fileName) throws IOException {
+	public static void readInput(String fileName) throws IOException {
 
-        BufferedReader br = new BufferedReader(new FileReader(fileName));
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
 
-        String[] parts = br.readLine().split(",");
+		String[] parts = br.readLine().split(",");
 
-        for (int i = 0; i < 4; i++) {
-            workerCounts[i] = Integer.parseInt(parts[i]);
-        }
-    parts = br.readLine().split(",");
+		for (int i = 0; i < 4; i++) {
+			workerCounts[i] = Integer.parseInt(parts[i]);
+		}
+		parts = br.readLine().split(",");
 
 		N_SHIFTS = parts.length - 1;
 
@@ -126,9 +127,10 @@ static int N_SHIFTS; //total number of shifts
 
 		System.out.println("failure");
 		System.exit(-1);
-		return -1;}
+		return -1;
+	}
 
-    public static void writeOutput(String fileName, char[][] worms) throws IOException {
+	public static void writeOutput(String fileName, char[][] worms) throws IOException {
 
 
 //        worms = new char[][]{{'B', 'D', 'D', 'F', 'D', 'D', 'F'},
@@ -136,35 +138,36 @@ static int N_SHIFTS; //total number of shifts
 //                             {'M', 'R', 'F', 'F', 'R', 'R', 'F'},
 //                             {'M', 'R', 'F', 'F', 'R', 'R', 'F'}};
 
-        StringBuilder outputString = new StringBuilder("");
+		StringBuilder outputString = new StringBuilder("");
 
-        PrintWriter pw = new PrintWriter(new FileWriter(fileName));
+		PrintWriter pw = new PrintWriter(new FileWriter(fileName));
 
-        for (int wormIndex = 0; wormIndex < worms.length; wormIndex++) {
-            outputString = new StringBuilder();
-            for (int shiftIndex = 0; shiftIndex < worms[wormIndex].length; shiftIndex++) {
-                outputString.append(worms[wormIndex][shiftIndex]).append(",");
-            }
-            pw.println(String.valueOf(outputString));
-        }
+		for (int wormIndex = 0; wormIndex < worms.length; wormIndex++) {
+			outputString = new StringBuilder();
+			for (int shiftIndex = 0; shiftIndex < worms[wormIndex].length; shiftIndex++) {
+				outputString.append(worms[wormIndex][shiftIndex]).append(",");
+			}
+			pw.println(String.valueOf(outputString));
+		}
 
-        pw.close();
-    }
+		pw.close();
+	}
+
+	/*
+	Boyd Minimum Viable Product
+	 */
+	public void mvp() {
+		for (int i = 0; i < workerCounts.length; i++) {
+			for (int specialityIndex = 0; specialityIndex < tasks.length; specialityIndex++) {
+				for (int shiftIndex = 0; shiftIndex < tasks[specialityIndex].length; shiftIndex++) {
 
 
-    /*
-    Boyd Minimum Viable Product
-     */
-    public void mvp() {
-        for (int i = 0; i < workerCounts.length; i++) {
-            for (int specialityIndex = 0; specialityIndex < tasks.length; specialityIndex++) {
-                for (int shiftIndex = 0; shiftIndex < tasks[specialityIndex].length; shiftIndex++) {
-                    break;
-                }
-            }
+					break;
+				}
+			}
 
-        }
-    }
+		}
+	}
 
 
 }
