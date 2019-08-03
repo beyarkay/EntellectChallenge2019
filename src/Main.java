@@ -1,5 +1,5 @@
 /*
- Each task has a cost of 1 shift/unit
+Each task has a cost of 1 shift/unit
 Tasks cost double outside the worm speciality
 Worms can take a break (free shift)
 
@@ -21,7 +21,12 @@ Night 0
 
 Uncompleted tasks move over to next shift
 
+<------------>
 
+Worms need a weekend (3 consecutive nothing shifts)
+Worms MUST take a WEEKEND or they RESIGN after 5 days with any shift worked
+Worms MUST work once every 5 days
+Worms MUST NOT have more than 42 motivation
  */
 public class Main {
 	public static void main(String[] args) {
