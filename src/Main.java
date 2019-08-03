@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import java.util.ArrayList;
+
 /*
  Each task has a cost of 1 shift/unit
 Tasks cost double outside the worm speciality
@@ -48,41 +50,53 @@ Complete all tasks
 One worm employed at the end at least
  */
 public class Main {
-	
-	//Worm types
-	static final int WT_B = 0; //Biochemist
-	static final int WT_M = 1; //Mechanical engineer
-	static final int WT_S = 2; //Space plumber
-	static final int WT_X = 3; //Xenobiologist
-	
-	//Specialities
-	static final int SP_D = 0; //Dome repair
-	static final int SP_R = 1; //Rover repair
-	static final int SP_P = 2; //Plumbing
-	static final int SP_A = 3; //Alien classification
-	
-	
-	static int[] workerCounts = new int[4]; //Count for number of each type of worker
-	
-	static int[][] tasks; //tasks[speciality][shift] = number of tasks for this speciality in this shift
-	
-	
-	public static void main(String[] args) throws IOException {
-		
-		readInput(args[0]);
-		
-		
-	
-	}
-	
-	public static void readInput(String fileName) throws IOException {
-		
-		BufferedReader br = new BufferedReader(new FileReader(fileName));
-		
-		String[] parts = br.readLine().split(",");
-		
-		for (int i = 0; i < 4; i++) {
-			workerCounts[i] = Integer.parseInt(parts[i]);
-		}
-	}
+
+    //Worm types
+    static final int WT_B = 0; //Biochemist
+    static final int WT_M = 1; //Mechanical engineer
+    static final int WT_S = 2; //Space plumber
+    static final int WT_X = 3; //Xenobiologist
+
+    //Specialities
+    static final int SP_D = 0; //Dome repair
+    static final int SP_R = 1; //Rover repair
+    static final int SP_P = 2; //Plumbing
+    static final int SP_A = 3; //Alien classification
+
+    /*
+    E.g:
+    * 2,3,4,5
+    * 588,7889,8792,2695
+     */
+    static int[] workerCounts = new int[4]; //Count for number of each type of worker
+
+    static int[][] tasks; //tasks[speciality][shift] = number of tasks for this speciality in this shift
+
+
+    public static void main(String[] args) throws IOException {
+        readInput(args[0]);
+    }
+
+    public static void readInput(String fileName) throws IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
+
+        String[] parts = br.readLine().split(",");
+
+        for (int i = 0; i < 4; i++) {
+            workerCounts[i] = Integer.parseInt(parts[i]);
+        }
+    }
+
+
+
+    /*
+    Boyd Minimum Viable Product
+     */
+    public void mvp() {
+        for (int i = 0; i < workerCounts.length; i++) {
+
+
+        }
+    }
 }
